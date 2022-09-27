@@ -1,0 +1,11 @@
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.title {
+    color: white;
+    font-size: 64px;
+    margin-bottom: 8px;
+}

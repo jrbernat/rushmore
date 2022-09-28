@@ -1,13 +1,26 @@
 import { useState } from "react";
-import { CommonProps } from "../../App";
+import { app, CommonProps } from "../../App";
 import ExitButton from "../../Components/ExitButton";
 import TextInput from "../../Components/TextInput";
+import * as Realm from "realm-web";
 import "./index.css";
+import { request } from "https";
+
+const GET_USER =
+  "https://us-east-1.aws.data.mongodb-api.com/app/rushmore-mlahn/endpoint/getUser";
 
 type State = "username" | "password";
 
-const checkPassword = (user: string, pass: string) => {
-  return user !== "";
+const checkPassword = async (user: string, pass: string) => {
+  const credentials = Realm.Credentials.emailPassword(user, pass);
+  try {
+    const user = await app.logIn(credentials);
+    const currentUser = app.currentUser;
+    console.assert(user.id === currentUser?.id);
+    return true;
+  } catch {
+    return false;
+  }
 };
 
 const LogIn = (props: CommonProps) => {
@@ -16,17 +29,21 @@ const LogIn = (props: CommonProps) => {
   const [userName, setUserName] = useState<string | undefined>(undefined);
 
   const onUsername = (text: string | undefined) => {
-    if (text !== undefined && text != "") {
+    if (text !== undefined && text !== "") {
       setState("password");
       setUserName(text);
       console.log(text);
     }
   };
 
-  const onPassword = (password: string) => {
+  const onPassword = async (password: string) => {
     if (userName === undefined) return;
-    if (checkPassword(userName, password)) {
-      document.cookie = "username=" + userName;
+    if (await checkPassword(userName, password)) {
+
+      app.currentUser?.functions.getUser().then((res) => {
+        console.log(res)
+      });
+
       setView("landing");
     }
   };
@@ -42,7 +59,7 @@ const LogIn = (props: CommonProps) => {
         />
       )}
       {state === "username" && (
-        <TextInput description="Enter Username" onSubmit={onUsername} />
+        <TextInput description="Enter Email" onSubmit={onUsername} />
       )}
       {state === "password" && (
         <TextInput description="Enter Password" onSubmit={onPassword} />

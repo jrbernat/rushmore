@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { CommonProps } from "../../App";
 import ExitButton from "../../Components/ExitButton";
 import TextInput from "../../Components/TextInput";
@@ -6,9 +7,14 @@ import "./index.css";
 const Join = (props: CommonProps) => {
   const { setView } = props;
 
+  const nav = useNavigate();
+
   const handleOpenRushmore = (id: string) => {
     // query db for the id
+
     // if found, display that rushmore
+    nav(`rushmore/${id}`, {replace: true});
+    
     // otherwise, display "not found" error
   };
 

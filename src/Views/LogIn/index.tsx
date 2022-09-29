@@ -101,7 +101,7 @@ const LogIn = (props: CommonProps) => {
   const onNewUsername = (username: string | undefined) => {
     if (validateUsername(username)) {
       app.currentUser?.functions
-        .setUsername(username)
+        .addUser(username)
         .then((res) => {
           console.log(res);
           if (res.error) {

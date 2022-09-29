@@ -1,5 +1,18 @@
 .text-input {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 2ch;
+}
+
+.text-area-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1ch;
+    align-items: center;
+}
+
+.text-area-input {
+    width: 80vw;
+    height: 12ch;
 }

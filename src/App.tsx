@@ -5,7 +5,7 @@ import Home from "./Components/Home";
 import Rushmore from "./Views/Rushmore";
 import * as Realm from "realm-web"
 
-export type View = "landing" | "join" | "history" | "create" | "log-in";
+export type View = "landing" | "join" | "history" | "create" | "log-in" | "loading";
 
 export const app = new Realm.App({id: "rushmore-mlahn"})
 

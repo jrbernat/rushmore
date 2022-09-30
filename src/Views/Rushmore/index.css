@@ -3,16 +3,42 @@
 .rushmore {
     padding-top: 10%;
     background-color: firebrick;
-    height: 100vh;
+    height: 94vh;
 }
 
 .topic {
     font-size: 48px;
     color: white;
+    margin: 16px;
 }
 
 .description {
     color: white;
     text-align: left;
     padding: 2ch;
+}
+
+
+.pre-start {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.pre-start-body {
+    max-width: 8in;
+}
+
+.pre-start-footer {
+    margin-bottom: 16px;
+}
+.members {
+    display: flex;
+    flex-direction: column;
+    border-style: solid;
+    margin: 16px;
+    max-width: 4in;
+    padding: 16px;
 }

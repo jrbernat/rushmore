@@ -16,6 +16,7 @@ type ViewMode =
 
 export interface RushmoreProps {
   rushmore: any;
+  id: string;
 }
 
 const Rushmore = () => {
@@ -24,14 +25,16 @@ const Rushmore = () => {
   const [view, setView] = useState<ViewMode>("loading");
   const [rushmore, setRushmore] = useState<any>(undefined);
 
-  useEffect(() => {
+  const [refreshRate, setRefreshRate] = useState(0);
+
+  const autoRefresh = () => {
+    console.log("refresh")
     // load the id
     app.currentUser?.functions
       .loadRushmore(rushmoreId)
       .then((res) => {
-        console.log(res)
         if (res) {
-          setRushmore(res);
+          if (res != rushmore) setRushmore(res);
         } else {
           setView("dne");
         }
@@ -39,10 +42,18 @@ const Rushmore = () => {
       .catch(() => {
         setView("dne");
       });
+  };
 
-    // if found, check if user is a viewer or participant
-    // and set view
-  }, [rushmoreId]);
+  // triggers the initial change to refreshRate for useEffect below
+  useEffect(() => {
+    autoRefresh();
+    setRefreshRate(20000);
+  }, []);
+
+  useEffect(() => {
+    if (refreshRate > 0) setInterval(autoRefresh, refreshRate);
+    return () => setRefreshRate(0);
+  }, [refreshRate]);
 
   useEffect(() => {
     if (!rushmore) {
@@ -82,7 +93,7 @@ const Rushmore = () => {
       case "edit":
         return <div>Make your pick!</div>;
       case "not started":
-        return <PreStart rushmore={rushmore} />;
+        return <PreStart id={rushmoreId!} rushmore={rushmore} />;
     }
   };
 

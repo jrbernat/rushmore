@@ -1,32 +1,89 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CommonProps } from "../../App";
+import { app, CommonProps } from "../../App";
 import ExitButton from "../../Components/ExitButton";
-import TextInput from "../../Components/TextInput";
 import "./index.css";
+
+const RushmorePreview = (props: {
+  rushmoreId: string;
+  onClick: () => void;
+}) => {
+  const { rushmoreId, onClick } = props;
+  const [creator, setCreator] = useState<string | undefined>(undefined);
+  const [title, setTitle] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    app.currentUser?.functions.loadRushmore(rushmoreId).then(async (res) => {
+      console.log(res);
+      app.currentUser?.functions
+        .getUserFromId(res.creator)
+        .then((res: any) => setCreator(res.username));
+
+      setTitle(res.title);
+    });
+  }, [rushmoreId]);
+
+  return (
+    <div className="invite" onClick={onClick}>
+      <div className="invite-title">{title ?? "Loading..."}</div>
+      {creator && <div className="inviter">owner: {creator}</div>}
+    </div>
+  );
+};
+
+const Invite = (props: { rushmoreId: string }) => {
+  const nav = useNavigate();
+  const onClick = () => {
+    if (window.confirm("Join this Rushmore?")) {
+      app.currentUser?.functions
+        .acceptInvite(props.rushmoreId)
+        .then(() => nav(`rushmore/${props.rushmoreId}`, { replace: true }));
+    }
+  };
+  return <RushmorePreview rushmoreId={props.rushmoreId} onClick={onClick} />;
+};
+
+const Current = (props: { rushmoreId: string }) => {
+  const nav = useNavigate();
+  const onClick = () => {
+    nav(`rushmore/${props.rushmoreId}`, { replace: true });
+  };
+  return <RushmorePreview rushmoreId={props.rushmoreId} onClick={onClick} />;
+};
 
 const Join = (props: CommonProps) => {
   const { setView } = props;
 
-  const nav = useNavigate();
+  const [userInfo, setUserInfo] = useState<any>({});
 
-  const handleOpenRushmore = (id: string) => {
-    // query db for the id
+  useEffect(() => {
+    app.currentUser?.functions.getUser().then((res) => {
+      setUserInfo(res);
+    });
+  }, []);
 
-    // if found, display that rushmore
-    nav(`rushmore/${id}`, {replace: true});
-    
-    // otherwise, display "not found" error
-  };
+  const invites = userInfo?.rushmores?.filter((r: any) => r.accepted === false);
+  const currents = userInfo?.rushmores?.filter((r: any) => r.accepted);
 
   return (
-    <div>
+    <div className="join">
       <ExitButton onExit={() => setView("landing")} />
-      <div className="join">Join an existing Rushmore</div>
-      <div className="input-container">
-        <TextInput
-          onSubmit={(t) => handleOpenRushmore(t)}
-          description={"Please enter Rushmore ID"}
-        />
+      <div className="subtitle">Your Rushmores</div>
+      <div className="invites">
+        <div className="flex-vertical-gap">
+          {currents?.map((i: any) => (
+            <Current rushmoreId={i.id} key={i.id} />
+          ))}
+        </div>
+      </div>
+      
+      <div className="subtitle">Invites</div>
+      <div className="invites">
+        <div className="flex-vertical-gap">
+          {invites?.map((i: any) => (
+            <Invite rushmoreId={i.id} key={i.id} />
+          ))}
+        </div>
       </div>
     </div>
   );

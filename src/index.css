@@ -10,3 +10,14 @@ footer {
   justify-content: space-between;
   margin: 1vh;
 }
+
+.flex-vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-vertical-gap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

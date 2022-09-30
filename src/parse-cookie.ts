@@ -6,7 +6,6 @@ export const ParseCookie = (cookie: string, target: string) => {
         const [k,v] = t.split("=");
 
         if (k === target) {
-            console.log(v)
             return v;
         }
     }

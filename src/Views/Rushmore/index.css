@@ -1,44 +1,120 @@
 @import "../../App.css";
 
 .rushmore {
-    padding-top: 10%;
-    background-color: firebrick;
-    height: 94vh;
+  padding-top: 10%;
+  height: 94vh;
+  background-image: linear-gradient(
+    45deg,
+    hsl(240deg 100% 20%) 0%,
+    hsl(223deg 100% 28%) 11%,
+    hsl(217deg 100% 35%) 22%,
+    hsl(211deg 100% 39%) 33%,
+    hsl(205deg 100% 40%) 44%,
+    hsl(195deg 100% 38%) 56%,
+    hsl(181deg 100% 33%) 67%,
+    hsl(162deg 100% 37%) 78%,
+    hsl(145deg 100% 42%) 89%,
+    hsl(120deg 85% 49%) 100%
+  );
 }
 
 .topic {
-    font-size: 48px;
-    color: white;
-    margin: 16px;
+  font-size: 48px;
+  color: white;
+  margin: 16px;
 }
 
 .description {
-    color: white;
-    text-align: left;
-    padding: 2ch;
+  color: white;
+  text-align: left;
+  padding: 2ch;
 }
 
-
 .pre-start {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
 }
 
 .pre-start-body {
-    max-width: 8in;
+  max-width: 8in;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .pre-start-footer {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 .members {
-    display: flex;
-    flex-direction: column;
-    border-style: solid;
-    margin: 16px;
-    max-width: 4in;
-    padding: 16px;
+  display: flex;
+  flex-direction: column;
+  border-style: solid;
+  margin: 16px;
+  width: 75%;
+  padding: 16px;
+}
+
+.active {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.board {
+  width: 95%;
+  height: 60%;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  padding: 4px;
+  overflow: auto;
+}
+
+.pick {
+  margin: 8px;
+}
+
+.picker {
+  background-color: rgba(0, 0, 0, 0.6);
+  margin: 1ch;
+  padding: 1ch;
+  border-radius: 4px;
+  color: white;
+}
+
+.pick {
+  color: white;
+  width: 95%;
+  text-align: left;
+  margin: 1ch;
+  background-color: black;
+  padding: 1ch;
+  outline: solid;
+  border-radius: 4px;
+  table-layout: fixed;
+}
+
+/* https://dev.to/xtrp/how-to-create-a-beautiful-custom-scrollbar-for-your-site-in-plain-css-1mjg */
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: white;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: white;
 }

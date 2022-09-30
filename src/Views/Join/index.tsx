@@ -14,7 +14,6 @@ const RushmorePreview = (props: {
 
   useEffect(() => {
     app.currentUser?.functions.loadRushmore(rushmoreId).then(async (res) => {
-      console.log(res);
       app.currentUser?.functions
         .getUserFromId(res.creator)
         .then((res: any) => setCreator(res.username));

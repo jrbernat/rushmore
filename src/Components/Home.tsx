@@ -39,7 +39,7 @@ const Home = () => {
   const renderFooter = () => {
     if (view === "log-in") return <div style={{ height: "5vh" /*TODO*/ }} />;
     return (
-      <footer>
+      <div className="footer">
         <span
           onClick={() => {
             if (app.currentUser) app.removeUser(app.currentUser);
@@ -50,12 +50,12 @@ const Home = () => {
           log out
         </span>
         <span>{ParseCookie(document.cookie, "username")}</span>
-      </footer>
+      </div>
     );
   };
   return (
     <div className="App">
-      <body>{renderView(view)}</body>
+      <div className="body">{renderView(view)}</div>
       {renderFooter()}
     </div>
   );

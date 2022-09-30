@@ -3,6 +3,11 @@
     flex-direction: column;
     align-items: center;
     gap: 2ch;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 2ch;
+    width: 80%;
+    border-radius: 4px;
+
 }
 
 .text-area-input-container {

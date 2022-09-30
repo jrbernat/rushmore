@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { app } from "../../App";
 import ExitButton from "../../Components/ExitButton";
+import Active from "./Active";
 import "./index.css";
 import PreStart from "./PreStart";
 
@@ -17,6 +18,7 @@ type ViewMode =
 export interface RushmoreProps {
   rushmore: any;
   id: string;
+  forceRefresh: Function;
 }
 
 const Rushmore = () => {
@@ -25,10 +27,8 @@ const Rushmore = () => {
   const [view, setView] = useState<ViewMode>("loading");
   const [rushmore, setRushmore] = useState<any>(undefined);
 
-  const [refreshRate, setRefreshRate] = useState(0);
-
   const autoRefresh = () => {
-    console.log("refresh")
+    console.log("refresh");
     // load the id
     app.currentUser?.functions
       .loadRushmore(rushmoreId)
@@ -46,14 +46,10 @@ const Rushmore = () => {
 
   // triggers the initial change to refreshRate for useEffect below
   useEffect(() => {
-    autoRefresh();
-    setRefreshRate(20000);
+    console.log("mount")
+    autoRefresh()
+    setInterval(autoRefresh, 20000)
   }, []);
-
-  useEffect(() => {
-    if (refreshRate > 0) setInterval(autoRefresh, refreshRate);
-    return () => setRefreshRate(0);
-  }, [refreshRate]);
 
   useEffect(() => {
     if (!rushmore) {
@@ -63,11 +59,14 @@ const Rushmore = () => {
       return setView("finished");
     }
     if (rushmore.started) {
-      if (rushmore.members.include(app.currentUser?.id)) {
-        return setView("edit");
-      } else {
-        return setView("none");
-      }
+      app.currentUser?.functions.getUser().then((userInfo) => {
+        if (rushmore.members.includes(userInfo.username)) {
+          return setView("edit");
+        } else {
+          console.log(rushmore.members, app.currentUser?.id);
+          return setView("none");
+        }
+      });
     } else {
       return setView("not started");
     }
@@ -91,9 +90,9 @@ const Rushmore = () => {
       case "view":
         return <div>Rank the participants!</div>;
       case "edit":
-        return <div>Make your pick!</div>;
+        return <Active id={rushmoreId!} rushmore={rushmore} forceRefresh={autoRefresh}/>;
       case "not started":
-        return <PreStart id={rushmoreId!} rushmore={rushmore} />;
+        return <PreStart id={rushmoreId!} rushmore={rushmore} forceRefresh={autoRefresh}/>;
     }
   };
 

@@ -1,3 +1,16 @@
+.body {
+  height: 95vh;
+  margin: 0px;
+}
+
+.footer {
+  height: 4vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 1vh;
+}
+
 body {
   height: 95vh;
   margin: 0px;
@@ -20,4 +33,23 @@ footer {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.flex-horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-horizontal-gap {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.center-align {
+  align-items: center;
+}
+
+.center-justify {
+  justify-content: center;
 }

@@ -14,7 +14,7 @@ const Members = (props: { members: string[] }) => {
   );
 };
 
-const InviteBox = (props: RushmoreProps) => {
+const InviteBox = (props: { id: string }) => {
   const { id } = props;
 
   return (
@@ -35,8 +35,23 @@ const InviteBox = (props: RushmoreProps) => {
   );
 };
 
+const StartBox = (props: RushmoreProps) => {
+  const { id, rushmore } = props;
+
+  const isOwner = app.currentUser?.id === rushmore.creator;
+
+  const startRushmore = () => {
+    app.currentUser?.functions
+      .startRushmore(id)
+      .then((res) => console.log(res));
+  };
+  if (isOwner) return <button onClick={startRushmore}>Start Rushmore</button>;
+
+  return <div>Waiting for the owner to start!</div>;
+};
+
 const PreStart = (props: RushmoreProps) => {
-  const { rushmore, id } = props;
+  const { rushmore, id , forceRefresh} = props;
   return (
     <div className="pre-start">
       <div className="pre-start-body">
@@ -45,7 +60,10 @@ const PreStart = (props: RushmoreProps) => {
         <div className="description">Description: {rushmore.description}</div>
         <Members members={rushmore.members} />
         {rushmore.members.length < 4 && (
-          <InviteBox rushmore={rushmore} id={id} />
+          <InviteBox id={id} />
+        )}
+        {rushmore.members.length === 4 && (
+          <StartBox rushmore={rushmore} id={id} forceRefresh={forceRefresh} />
         )}
       </div>
       <div className="pre-start-footer">

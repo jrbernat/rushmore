@@ -96,6 +96,9 @@
   outline: solid;
   border-radius: 4px;
   table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 1ch;
+  position: relative;
 }
 
 /* https://dev.to/xtrp/how-to-create-a-beautiful-custom-scrollbar-for-your-site-in-plain-css-1mjg */
@@ -117,4 +120,17 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: white;
+}
+
+.vetoed {
+    color: red
+}
+
+.confirmed {
+    color: green;
+}
+
+.veto-label {
+    color: red;
+    font-size: 32px;
 }

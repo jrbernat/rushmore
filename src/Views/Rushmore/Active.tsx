@@ -5,7 +5,7 @@ import { ParseCookie } from "../../parse-cookie";
 import { getPickerIndex, getPickIndex } from "../../Utils/Snakedraft";
 import Pick from "./Pick";
 
-const COLORS = ["#C724B1","#4D4DFF", "#E0E722", "#44D62C"]
+const COLORS = ["#C724B1", "#4D4DFF", "#E0E722", "#44D62C"];
 
 const Active = (props: RushmoreProps) => {
   const { rushmore, id, forceRefresh } = props;
@@ -41,6 +41,7 @@ const Active = (props: RushmoreProps) => {
             picker={rushmore.members[getPickerIndex(i)]}
             key={i}
             color={COLORS[getPickerIndex(i)]}
+            isMostRecent={i === rushmore.picks?.length - 1}
           />
         ))}
       </div>

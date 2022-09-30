@@ -116,6 +116,7 @@ const LogIn = (props: CommonProps) => {
 
   return (
     <div className="log-in">
+      <div className="title">RUSHMORE</div>
       {state !== "username" && (
         <ExitButton
           onExit={() => {

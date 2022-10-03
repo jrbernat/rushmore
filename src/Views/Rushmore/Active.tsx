@@ -2,7 +2,11 @@ import { RushmoreProps } from ".";
 import { app } from "../../App";
 import TextInput from "../../Components/TextInput";
 import { ParseCookie } from "../../parse-cookie";
-import { getPickerIndex, getPickIndex } from "../../Utils/Snakedraft";
+import {
+  getPickerIndex,
+  getPickIndex,
+  getValidPicks,
+} from "../../Utils/Snakedraft";
 import Pick from "./Pick";
 
 const COLORS = ["#C724B1", "#4D4DFF", "#E0E722", "#44D62C"];
@@ -17,7 +21,8 @@ const Active = (props: RushmoreProps) => {
       .catch((err) => console.log(err));
   };
 
-  const pickerIndex = getPickerIndex(rushmore.picks?.length);
+  const pickerIndex = getPickerIndex(rushmore.picks);
+
   let whosPick = rushmore.members[pickerIndex];
 
   const usersPick = ParseCookie(document.cookie, "username") === whosPick;
@@ -26,6 +31,9 @@ const Active = (props: RushmoreProps) => {
   }
 
   const picks: any[] = rushmore.picks;
+
+  const lastPickConfirmed = picks.at(-1).confirms?.length > 1;
+  const lastPickVetoed = picks.at(-1).vetos?.length > 1;
 
   return (
     <div className="active">
@@ -37,22 +45,44 @@ const Active = (props: RushmoreProps) => {
         {picks.map((p, i) => (
           <Pick
             pick={p}
-            i={i}
-            picker={rushmore.members[getPickerIndex(i)]}
+            i_literal={i}
+            i_snake={getValidPicks(rushmore.picks.slice(0, i)).length}
+            picker={
+              rushmore.members[getPickerIndex(rushmore?.picks?.slice(0, i))]
+            }
             key={i}
-            color={COLORS[getPickerIndex(i)]}
-            isMostRecent={i === rushmore.picks?.length - 1}
+            color={COLORS[getPickerIndex(rushmore?.picks?.slice(0, i))]}
+            needsConfirmation={
+              i === rushmore.picks?.length - 1 && !lastPickConfirmed
+            }
+            rushmoreId={id}
+            refresh={forceRefresh}
           />
         ))}
       </div>
-      <div className="flex-horizontal-gap center-align">
-        On the clock: <span className="subtitle">{whosPick}!</span>
-      </div>
-      {usersPick && (
+      {lastPickConfirmed && (
+        <div className="flex-horizontal-gap center-align">
+          On the clock: <span className="subtitle">{whosPick}!</span>
+        </div>
+      )}
+      {lastPickVetoed && (
+        <div className="flex-horizontal-gap center-align">
+          Veto!<span className="subtitle">{whosPick}</span>{" "}
+          {usersPick ? "are " : "is "}
+          on the clock again.
+        </div>
+      )}
+      {!lastPickConfirmed && !lastPickVetoed && (
+        <div className="flex-horizontal-gap center-align">
+          Waiting for the previous pick to be confirmed.
+          <br /> Up next: {whosPick}!
+        </div>
+      )}
+      {usersPick && (lastPickConfirmed || lastPickVetoed) && (
         <div className="picker">
           <TextInput
             onSubmit={makePick}
-            description={`Pick ${getPickIndex(rushmore.picks?.length)}`}
+            description={`Pick ${getPickIndex(getValidPicks(rushmore.picks).length)}`}
           />
         </div>
       )}

@@ -84,6 +84,9 @@
   padding: 1ch;
   border-radius: 4px;
   color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .pick {

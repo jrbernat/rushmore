@@ -18,7 +18,7 @@ type ViewMode =
 export interface RushmoreProps {
   rushmore: any;
   id: string;
-  forceRefresh: Function;
+  forceRefresh: () => void;
 }
 
 const Rushmore = () => {

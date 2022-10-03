@@ -1,4 +1,5 @@
-export const getPickerIndex = (i: number) => {
+export const getPickerIndex = (picks: any[]) => {
+  const i = getValidPicks(picks).length;
   if (i === 0 || i === 7 || i === 8 || i === 15) {
     return 0;
   }
@@ -9,6 +10,10 @@ export const getPickerIndex = (i: number) => {
     return 2;
   }
   return 3;
+};
+
+export const getValidPicks = (picks: any[]) => {
+  return picks?.filter((pick: any) => (pick.vetos?.length ?? 0) < 2);
 };
 
 export const getPickIndex = (i: number) => {

@@ -1,16 +1,17 @@
-import { useEffect } from "react";
-import { CommonProps } from "../../App";
-import { ParseCookie } from "../../parse-cookie";
+import { useContext, useEffect } from "react";
+import { CommonProps, UserContext } from "../../App";
 
 const Loading = (props: CommonProps) => {
   const { setView } = props;
+
+  const user = useContext(UserContext)
   useEffect(() => {
-    if (ParseCookie(document.cookie, "username")) {
+    if (user?.isLoggedIn) {
       setView("landing");
     } else {
       setView("log-in");
     }
-  });
+  }, [user]);
 
   return <div>Loading</div>;
 };

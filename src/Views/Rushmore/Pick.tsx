@@ -1,5 +1,6 @@
-import { app } from "../../App";
-import { ParseCookie } from "../../parse-cookie";
+import userEvent from "@testing-library/user-event";
+import { useContext } from "react";
+import { app, UserContext } from "../../App";
 import { getPickIndex } from "../../Utils/Snakedraft";
 
 interface PickProps {
@@ -24,6 +25,9 @@ const Pick = (props: PickProps) => {
     rushmoreId,
     refresh,
   } = props;
+
+  const user = useContext(UserContext);
+
   const likes = pick.likes?.length ?? 0;
   const dislikes = pick.dislikes?.length ?? 0;
 
@@ -125,30 +129,29 @@ const Pick = (props: PickProps) => {
                   ))}
                 </span>
               </td>
-              {!wasVetoed &&
-                picker !== ParseCookie(document.cookie, "username") && (
-                  <td colSpan={6}>
-                    {!hasVetoed && !hasConfirmed && (
-                      <span className="flex-horizontal-gap">
-                        <button onClick={confirm}>Allow</button>
-                        <button onClick={veto}>Veto</button>
-                      </span>
-                    )}
+              {!wasVetoed && picker !== user?.username && (
+                <td colSpan={6}>
+                  {!hasVetoed && !hasConfirmed && (
+                    <span className="flex-horizontal-gap">
+                      <button onClick={confirm}>Allow</button>
+                      <button onClick={veto}>Veto</button>
+                    </span>
+                  )}
 
-                    {hasVetoed && (
-                      <span className="flex-horizontal-gap vetoed">
-                        <span>You vetoed!</span>
-                        <button onClick={veto}>Undo</button>
-                      </span>
-                    )}
-                    {hasConfirmed && (
-                      <span className="flex-horizontal-gap confirmed">
-                        <span>You confirmed!</span>
-                        <button onClick={confirm}>Undo</button>
-                      </span>
-                    )}
-                  </td>
-                )}
+                  {hasVetoed && (
+                    <span className="flex-horizontal-gap vetoed">
+                      <span>You vetoed!</span>
+                      <button onClick={veto}>Undo</button>
+                    </span>
+                  )}
+                  {hasConfirmed && (
+                    <span className="flex-horizontal-gap confirmed">
+                      <span>You confirmed!</span>
+                      <button onClick={confirm}>Undo</button>
+                    </span>
+                  )}
+                </td>
+              )}
             </tr>
           )}
           {wasVetoed && (

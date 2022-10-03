@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { app, CommonProps } from "../../App";
+import { useContext, useEffect, useState } from "react";
+import { app, CommonProps, UserContext } from "../../App";
 import ExitButton from "../../Components/ExitButton";
 import TextInput from "../../Components/TextInput";
 import * as Realm from "realm-web";
@@ -46,10 +46,22 @@ const validatePassword = (s: string | undefined) => {
   return true; // todo
 };
 
-const LogIn = (props: CommonProps) => {
-  const { setView } = props;
+interface LoginProps extends CommonProps {
+  refreshUser: () => Promise<any>;
+}
+
+const LogIn = (props: LoginProps) => {
+  const { setView, refreshUser } = props;
   const [state, setState] = useState<State>("username");
   const [email, setEmail] = useState<string | undefined>(undefined);
+
+  const user = useContext(UserContext);
+
+  useEffect(() => {
+    if (user?.isLoggedIn) {
+      setView("landing");
+    }
+  }, [user]);
 
   const onUsername = (text: string | undefined) => {
     if (validateEmail(text)) {
@@ -61,19 +73,13 @@ const LogIn = (props: CommonProps) => {
   const onPassword = async (password: string) => {
     if (email === undefined) return;
     if (await checkPassword(email, password)) {
-      app.currentUser?.functions
-        .getUser()
-        .then((res) => {
-          console.log(res)
-          if (res && res.username) {
-            const { username } = res;
-            document.cookie = `username=${username}`;
-            setView("landing");
-          } else {
-            setState("createUsername");
-          }
-        })
-        .catch((err) => console.log(err));
+      refreshUser().then((res) => {
+        if (res?.username) {
+          setView("landing");
+        } else {
+          setState("createUsername");
+        }
+      });
     }
   };
 
@@ -88,9 +94,10 @@ const LogIn = (props: CommonProps) => {
     if (validatePassword(password)) {
       app.emailPasswordAuth
         .registerUser({ email: email!, password: password! })
-        .then(async () => {
-          await checkPassword(email!, password!);
-          setState("createUsername");
+        .then(() => {
+          checkPassword(email!, password!).then((res) => {
+            if (res) setState("createUsername");
+          });
         })
         .catch((err) => {
           console.log(err); // todo notify
@@ -103,14 +110,12 @@ const LogIn = (props: CommonProps) => {
       app.currentUser?.functions
         .addUser(username)
         .then((res) => {
-          console.log(res);
           if (res.error) {
             throw Error("Username Taken");
           }
-          document.cookie = `username=${username}`;
-          setView("landing")
+          refreshUser();
         })
-        .catch((err) => console.log(err))
+        .catch((err) => console.log(err));
     }
   };
 

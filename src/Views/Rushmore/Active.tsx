@@ -1,7 +1,7 @@
+import { useContext } from "react";
 import { RushmoreProps } from ".";
-import { app } from "../../App";
+import { app, UserContext } from "../../App";
 import TextInput from "../../Components/TextInput";
-import { ParseCookie } from "../../parse-cookie";
 import {
   getPickerIndex,
   getPickIndex,
@@ -14,6 +14,8 @@ const COLORS = ["#C724B1", "#4D4DFF", "#E0E722", "#44D62C"];
 const Active = (props: RushmoreProps) => {
   const { rushmore, id, forceRefresh } = props;
 
+  const user = useContext(UserContext);
+
   const makePick = (pick: string) => {
     app.currentUser?.functions
       .makePick(id, pick)
@@ -25,7 +27,7 @@ const Active = (props: RushmoreProps) => {
 
   let whosPick = rushmore.members[pickerIndex];
 
-  const usersPick = ParseCookie(document.cookie, "username") === whosPick;
+  const usersPick = user?.username === whosPick;
   if (usersPick) {
     whosPick = "YOU";
   }
@@ -82,7 +84,9 @@ const Active = (props: RushmoreProps) => {
         <div className="picker">
           <TextInput
             onSubmit={makePick}
-            description={`Pick ${getPickIndex(getValidPicks(rushmore.picks).length)}`}
+            description={`Pick ${getPickIndex(
+              getValidPicks(rushmore.picks).length
+            )}`}
           />
         </div>
       )}

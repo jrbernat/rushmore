@@ -1,28 +1,28 @@
-import { useEffect, useState } from "react";
-import { app, View } from "../App";
-import { ParseCookie } from "../parse-cookie";
+import { useContext, useEffect, useState } from "react";
+import { app, UserContext, View } from "../App";
 import Create from "../Views/Create";
+import History from "../Views/History";
 import Join from "../Views/Join";
 import Landing from "../Views/Landing";
-import LogIn from "../Views/LogIn";
-import History from "../Views/History";
 import Loading from "../Views/Loading";
+import LogIn from "../Views/LogIn";
 
-const Home = () => {
+const Home = (props: { refreshUser: () => Promise<any> }) => {
+  const { refreshUser } = props;
   const [view, setView] = useState<View>("loading");
 
+  const user = useContext(UserContext);
+
   useEffect(() => {
-    if (view === "landing") {
-      if (ParseCookie(document.cookie, "username") === undefined) {
-        setView("log-in");
-      }
+    if (!user?.isLoggedIn) {
+      setView("log-in");
     }
-  }, [view]);
+  }, [user]);
 
   const renderView = (view: View) => {
     switch (view) {
       case "log-in":
-        return <LogIn setView={setView} />;
+        return <LogIn setView={setView} refreshUser={refreshUser} />;
       case "landing":
         return <Landing setView={setView} />;
       case "join":
@@ -42,14 +42,12 @@ const Home = () => {
       <div className="footer">
         <span
           onClick={() => {
-            if (app.currentUser) app.removeUser(app.currentUser);
-            document.cookie = "username=";
-            setView("log-in");
+            app.currentUser?.logOut().then(() => refreshUser());
           }}
         >
           log out
         </span>
-        <span>{ParseCookie(document.cookie, "username")}</span>
+        <span>{user?.username}</span>
       </div>
     );
   };

@@ -131,7 +131,11 @@ const LogIn = (props: LoginProps) => {
         />
       )}
       {state === "username" && (
-        <TextInput description="Enter Email" onSubmit={onUsername} />
+        <TextInput
+          description="Enter Email"
+          onSubmit={onUsername}
+          type="email"
+        />
       )}
       {state === "username" && (
         <div className="login-footer">
@@ -144,16 +148,28 @@ const LogIn = (props: LoginProps) => {
         </div>
       )}
       {state === "password" && (
-        <TextInput description="Enter Password" onSubmit={onPassword} />
+        <TextInput
+          description="Enter Password"
+          onSubmit={onPassword}
+          type="password"
+        />
       )}
       {state === "createEmail" && (
         <div>
-          <TextInput description="Enter your email" onSubmit={onNewEmail} />
+          <TextInput
+            description="Enter your email"
+            onSubmit={onNewEmail}
+            type="email"
+          />
         </div>
       )}
       {state === "createPass" && (
         <div>
-          <TextInput description="Create a password" onSubmit={onNewPassword} />
+          <TextInput
+            description="Create a password"
+            onSubmit={onNewPassword}
+            type="password"
+          />
         </div>
       )}
       {state === "createUsername" && (

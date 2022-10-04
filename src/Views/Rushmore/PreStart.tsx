@@ -2,6 +2,7 @@ import { RushmoreProps } from ".";
 import { app } from "../../App";
 import TextInput from "../../Components/TextInput";
 import { CapitalizeFirst } from "../../Utils/String";
+import "./index.css"
 
 const Members = (props: { members: string[] }) => {
   return (

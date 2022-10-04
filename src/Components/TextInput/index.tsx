@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { HTMLInputTypeAttribute, useRef } from "react";
 import "./index.css";
 
 interface TextInputProps {
@@ -6,12 +6,14 @@ interface TextInputProps {
   description: string;
   defaultText?: string;
   maxLength?: number;
+  type?: HTMLInputTypeAttribute;
 }
 
 export const LargeTextInput = (props: TextInputProps) => {
   const { onSubmit, description, maxLength = 128, defaultText = "" } = props;
 
-  const handleSubmit = (t: string | undefined) => {
+  const handleSubmit = () => {
+    const t = text.current?.value;
     if (t !== undefined) {
       return onSubmit(t);
     }
@@ -28,18 +30,26 @@ export const LargeTextInput = (props: TextInputProps) => {
           defaultValue={defaultText}
           className="text-area-input"
           maxLength={maxLength}
+          onKeyDown={(evt) => {
+            if (evt.key === "Enter") handleSubmit();
+          }}
         />
-        <button onClick={() => handleSubmit(text.current?.value)}>
-          Confirm
-        </button>
+        <button onClick={handleSubmit}>Confirm</button>
       </div>
     </div>
   );
 };
 const TextInput = (props: TextInputProps) => {
-  const { onSubmit, description, maxLength = 24, defaultText = "" } = props;
+  const {
+    onSubmit,
+    description,
+    maxLength = 24,
+    defaultText = "",
+    type = "text",
+  } = props;
 
-  const handleSubmit = (t: string | undefined) => {
+  const handleSubmit = () => {
+    const t = text.current?.value;
     if (t !== undefined) {
       return onSubmit(t);
     }
@@ -51,10 +61,16 @@ const TextInput = (props: TextInputProps) => {
     <div className="text-input">
       <span>{description}</span>
       <div>
-        <input ref={text} maxLength={maxLength} defaultValue={defaultText} />
-        <button onClick={() => handleSubmit(text.current?.value)}>
-          Confirm
-        </button>
+        <input
+          ref={text}
+          maxLength={maxLength}
+          defaultValue={defaultText}
+          type={type}
+          onKeyDown={(evt) => {
+            if (evt.key === "Enter") handleSubmit();
+          }}
+        />
+        <button onClick={handleSubmit}>Confirm</button>
       </div>
     </div>
   );

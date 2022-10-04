@@ -29,12 +29,14 @@ const Create = (props: CommonProps) => {
   const nav = useNavigate();
 
   const onCreate = () => {
-    app.currentUser?.functions.createRushmore({
-      title: topic,
-      description: description,
-    }).then(({insertedId}) => {
-      nav(`rushmore/${insertedId.toString()}`, {replace: true});
-    });
+    app.currentUser?.functions
+      .createRushmore({
+        title: topic,
+        description: description,
+      })
+      .then(({ insertedId }) => {
+        nav(`rushmore/${insertedId.toString()}`, { replace: true });
+      });
   };
 
   const renderTopic = () => {
@@ -54,9 +56,6 @@ const Create = (props: CommonProps) => {
       <div className="confirmed-text">
         Topic:
         <span className="subtitle">{topic}</span>
-        <span className="change-button">
-          <button onClick={() => setTopic(undefined)}>Edit</button>
-        </span>
       </div>
     );
   };
@@ -78,9 +77,6 @@ const Create = (props: CommonProps) => {
       <div className="confirmed-text">
         Description:
         <span className="subtitle">{description}</span>
-        <span className="change-button">
-          <button onClick={() => setDescription(undefined)}>Edit</button>
-        </span>
       </div>
     );
   };
@@ -95,6 +91,18 @@ const Create = (props: CommonProps) => {
         {!needsDescription && !needsTopic && (
           <span>
             <button onClick={onCreate}>Create Rushmore</button>
+          </span>
+        )}
+        {(!needsDescription || !needsTopic) && (
+          <span>
+            <button
+              onClick={() => {
+                setDescription(undefined);
+                setTopic(undefined);
+              }}
+            >
+              Edit
+            </button>
           </span>
         )}
       </div>

@@ -19,7 +19,7 @@ const Active = (props: RushmoreProps) => {
   const makePick = (pick: string) => {
     app.currentUser?.functions
       .makePick(id, pick)
-      .then(() => forceRefresh())
+      .then(forceRefresh)
       .catch((err) => console.log(err));
   };
 

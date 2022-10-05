@@ -10,7 +10,8 @@ type State =
   | "password"
   | "createEmail"
   | "createPass"
-  | "createUsername";
+  | "createUsername"
+  | "enterPhoneNumber";
 
 const checkPassword = async (user: string, pass: string) => {
   const credentials = Realm.Credentials.emailPassword(user, pass);
@@ -46,6 +47,16 @@ const validatePassword = (s: string | undefined) => {
   return true; // todo
 };
 
+const validatePhoneNumber = (s: string | undefined) => {
+  if (!s?.startsWith("+1")) {
+    return false;
+  }
+  if (s?.length !== 12) {
+    return false;
+  }
+  return true;
+}
+
 interface LoginProps extends CommonProps {
   refreshUser: () => Promise<any>;
 }
@@ -54,6 +65,7 @@ const LogIn = (props: LoginProps) => {
   const { setView, refreshUser } = props;
   const [state, setState] = useState<State>("username");
   const [email, setEmail] = useState<string | undefined>(undefined);
+  const [username, setUsername] = useState<string | undefined>(undefined);
 
   const user = useContext(UserContext);
 
@@ -107,8 +119,17 @@ const LogIn = (props: LoginProps) => {
 
   const onNewUsername = (username: string | undefined) => {
     if (validateUsername(username)) {
+      setUsername(username);
+      setState("enterPhoneNumber")
+    } else {
+      console.log("invalid username") // todo
+    }
+  };
+
+  const onPhoneNumber = (phoneNumber: string | undefined) => {
+    if (validatePhoneNumber(phoneNumber)) {
       app.currentUser?.functions
-        .addUser(username)
+        .addUser(username, phoneNumber)
         .then((res) => {
           if (res.error) {
             throw Error("Username Taken");
@@ -117,7 +138,7 @@ const LogIn = (props: LoginProps) => {
         })
         .catch((err) => console.log(err));
     }
-  };
+  }
 
   return (
     <div className="log-in">
@@ -175,6 +196,11 @@ const LogIn = (props: LoginProps) => {
       {state === "createUsername" && (
         <div>
           <TextInput description="Create a username" onSubmit={onNewUsername} />
+        </div>
+      )}
+      {state === "enterPhoneNumber" && (
+        <div>
+          <TextInput description="Enter phone number" onSubmit={onPhoneNumber} type="tel" defaultText="+1"/>
         </div>
       )}
     </div>

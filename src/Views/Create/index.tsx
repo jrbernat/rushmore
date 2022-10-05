@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { app, CommonProps } from "../../App";
 import ExitButton from "../../Components/ExitButton";
@@ -28,11 +28,14 @@ const Create = (props: CommonProps) => {
 
   const nav = useNavigate();
 
+  const sendSms = useRef<HTMLInputElement>(null);
+
   const onCreate = () => {
     app.currentUser?.functions
       .createRushmore({
         title: topic,
         description: description,
+        smsNotify: sendSms.current?.value ?? false
       })
       .then(({ insertedId }) => {
         nav(`rushmore/${insertedId.toString()}`, { replace: true });
@@ -88,6 +91,14 @@ const Create = (props: CommonProps) => {
       <div className="create-container">
         {renderTopic()}
         {renderDescription()}
+        <div className="black-opaque sms-notify">
+          Enable SMS notifications
+        <input
+          ref={sendSms}
+          defaultChecked={true}
+          type="checkbox"
+        />
+        </div>
         {!needsDescription && !needsTopic && (
           <span>
             <button onClick={onCreate}>Create Rushmore</button>

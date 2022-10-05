@@ -28,27 +28,29 @@ const Rushmore = () => {
   const [rushmore, setRushmore] = useState<any>(undefined);
 
   const autoRefresh = () => {
-    console.log("refresh");
-    // load the id
-    app.currentUser?.functions
-      .loadRushmore(rushmoreId)
-      .then((res) => {
-        if (res) {
-          if (res != rushmore) setRushmore(res);
-        } else {
+    if (!document.hidden && rushmoreId) {
+      console.log("refresh");
+      // load the id
+      app.currentUser?.functions
+        .loadRushmore(rushmoreId)
+        .then((res) => {
+          if (res) {
+            if (res != rushmore) setRushmore(res);
+          } else {
+            setView("dne");
+          }
+        })
+        .catch(() => {
           setView("dne");
-        }
-      })
-      .catch(() => {
-        setView("dne");
-      });
+        });
+    }
   };
 
   // triggers the initial change to refreshRate for useEffect below
   useEffect(() => {
-    console.log("mount")
-    autoRefresh()
-    setInterval(autoRefresh, 20000)
+    console.log("mount");
+    autoRefresh();
+    setInterval(autoRefresh, 20000);
   }, []);
 
   useEffect(() => {
@@ -90,9 +92,21 @@ const Rushmore = () => {
       case "view":
         return <div>Rank the participants!</div>;
       case "edit":
-        return <Active id={rushmoreId!} rushmore={rushmore} forceRefresh={autoRefresh}/>;
+        return (
+          <Active
+            id={rushmoreId!}
+            rushmore={rushmore}
+            forceRefresh={autoRefresh}
+          />
+        );
       case "not started":
-        return <PreStart id={rushmoreId!} rushmore={rushmore} forceRefresh={autoRefresh}/>;
+        return (
+          <PreStart
+            id={rushmoreId!}
+            rushmore={rushmore}
+            forceRefresh={autoRefresh}
+          />
+        );
     }
   };
 

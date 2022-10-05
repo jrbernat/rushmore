@@ -34,8 +34,10 @@ const Active = (props: RushmoreProps) => {
 
   const picks: any[] = rushmore.picks;
 
-  const lastPickConfirmed = picks.at(-1).confirms?.length > 1;
-  const lastPickVetoed = picks.at(-1).vetos?.length > 1;
+  const lastPickConfirmed = picks.at(-1)?.confirms?.length > 1;
+  const lastPickVetoed = picks.at(-1)?.vetos?.length > 1;
+
+  const firstPick = picks.length === 0;
 
   return (
     <div className="active">
@@ -62,25 +64,25 @@ const Active = (props: RushmoreProps) => {
           />
         ))}
       </div>
-      {lastPickConfirmed && (
+      {lastPickConfirmed || firstPick && (
         <div className="flex-horizontal-gap center-align">
           On the clock: <span className="subtitle">{whosPick}!</span>
         </div>
       )}
-      {lastPickVetoed && (
+      {lastPickVetoed && !firstPick && (
         <div className="flex-horizontal-gap center-align">
           Veto!<span className="subtitle">{whosPick}</span>{" "}
           {usersPick ? "are " : "is "}
           on the clock again.
         </div>
       )}
-      {!lastPickConfirmed && !lastPickVetoed && (
+      {!lastPickConfirmed && !lastPickVetoed && !firstPick && (
         <div className="flex-horizontal-gap center-align">
           Waiting for the previous pick to be confirmed.
           <br /> Up next: {whosPick}!
         </div>
       )}
-      {usersPick && (lastPickConfirmed || lastPickVetoed) && (
+      {usersPick && (lastPickConfirmed || lastPickVetoed || firstPick) && (
         <div className="picker">
           <TextInput
             onSubmit={makePick}

@@ -21,7 +21,7 @@
 .invite {
     border-radius: 4px;
     padding: 8px;
-    height: 6ch;
+    min-height: 6ch;
     background-color: rgba(0, 0, 0, 0.3);
     border-style: solid;
     border-color: white;

@@ -1,27 +1,21 @@
-.body {
-  height: 95vh;
-  margin: 0px;
-}
-
-.footer {
-  height: 4vh;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 1vh;
-}
-
 body {
-  height: 95vh;
   margin: 0px;
 }
 
 footer {
-  height: 4vh;
+  margin: 0px;
+}
+
+.body {
+  min-height: 94vh;
+}
+
+.footer {
+  padding: 4px;
+  min-height: 4vh;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 1vh;
 }
 
 .flex-vertical {

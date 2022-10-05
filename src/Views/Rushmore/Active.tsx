@@ -64,7 +64,7 @@ const Active = (props: RushmoreProps) => {
           />
         ))}
       </div>
-      {lastPickConfirmed || firstPick && (
+      {(lastPickConfirmed || firstPick) && (
         <div className="flex-horizontal-gap center-align">
           On the clock: <span className="subtitle">{whosPick}!</span>
         </div>

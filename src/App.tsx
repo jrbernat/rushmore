@@ -12,8 +12,6 @@ export type View =
   | "join"
   | "history"
   | "create"
-  | "log-in"
-  | "loading";
 
 export const app = new Realm.App({ id: "rushmore-mlahn" });
 

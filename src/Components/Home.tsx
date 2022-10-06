@@ -4,25 +4,18 @@ import Create from "../Views/Create";
 import History from "../Views/History";
 import Join from "../Views/Join";
 import Landing from "../Views/Landing";
-import Loading from "../Views/Loading";
 import LogIn from "../Views/LogIn";
+import Popup from "./PopUp";
 
 const Home = (props: { refreshUser: () => Promise<any> }) => {
   const { refreshUser } = props;
-  const [view, setView] = useState<View>("loading");
+  const [view, setView] = useState<View>("landing");
 
   const user = useContext(UserContext);
 
-  useEffect(() => {
-    if (!user?.isLoggedIn) {
-      setView("log-in");
-    }
-  }, [user]);
-
   const renderView = (view: View) => {
+    if (!user?.isLoggedIn) return <LogIn refreshUser={refreshUser} />;
     switch (view) {
-      case "log-in":
-        return <LogIn setView={setView} refreshUser={refreshUser} />;
       case "landing":
         return <Landing setView={setView} />;
       case "join":
@@ -31,13 +24,11 @@ const Home = (props: { refreshUser: () => Promise<any> }) => {
         return <History setView={setView} />;
       case "create":
         return <Create setView={setView} />;
-      case "loading":
-        return <Loading setView={setView} />;
     }
   };
 
   const renderFooter = () => {
-    if (view === "log-in") return <div style={{ height: "5vh" /*TODO*/ }} />;
+    if (!user?.isLoggedIn) return <div className="footer" />;
     return (
       <div className="footer">
         <span

@@ -55,25 +55,17 @@ const validatePhoneNumber = (s: string | undefined) => {
     return false;
   }
   return true;
-}
+};
 
-interface LoginProps extends CommonProps {
+interface LoginProps {
   refreshUser: () => Promise<any>;
 }
 
 const LogIn = (props: LoginProps) => {
-  const { setView, refreshUser } = props;
+  const { refreshUser } = props;
   const [state, setState] = useState<State>("username");
   const [email, setEmail] = useState<string | undefined>(undefined);
   const [username, setUsername] = useState<string | undefined>(undefined);
-
-  const user = useContext(UserContext);
-
-  useEffect(() => {
-    if (user?.isLoggedIn) {
-      setView("landing");
-    }
-  }, [user]);
 
   const onUsername = (text: string | undefined) => {
     if (validateEmail(text)) {
@@ -86,9 +78,7 @@ const LogIn = (props: LoginProps) => {
     if (email === undefined) return;
     if (await checkPassword(email, password)) {
       refreshUser().then((res) => {
-        if (res?.username) {
-          setView("landing");
-        } else {
+        if (!res?.username) {
           setState("createUsername");
         }
       });
@@ -120,9 +110,9 @@ const LogIn = (props: LoginProps) => {
   const onNewUsername = (username: string | undefined) => {
     if (validateUsername(username)) {
       setUsername(username);
-      setState("enterPhoneNumber")
+      setState("enterPhoneNumber");
     } else {
-      console.log("invalid username") // todo
+      console.log("invalid username"); // todo
     }
   };
 
@@ -138,71 +128,80 @@ const LogIn = (props: LoginProps) => {
         })
         .catch((err) => console.log(err));
     }
-  }
+  };
 
   return (
     <div className="log-in">
-      <div className="title">RUSHMORE</div>
-      {state !== "username" && (
-        <ExitButton
-          onExit={() => {
-            setState("username");
-            setEmail(undefined);
-          }}
-        />
-      )}
-      {state === "username" && (
-        <TextInput
-          description="Enter Email"
-          onSubmit={onUsername}
-          type="email"
-        />
-      )}
-      {state === "username" && (
-        <div className="login-footer">
-          <div
-            className="create-account-button"
-            onClick={() => setState("createEmail")}
-          >
-            Create Account
-          </div>
-        </div>
-      )}
-      {state === "password" && (
-        <TextInput
-          description="Enter Password"
-          onSubmit={onPassword}
-          type="password"
-        />
-      )}
-      {state === "createEmail" && (
-        <div>
-          <TextInput
-            description="Enter your email"
-            onSubmit={onNewEmail}
-            type="email"
+      <div>
+        <div className="log-in-title">Welcome to Rushmore!</div>
+        Please log in or create an account
+      </div>
+      <div className="log-in-body">
+        {state !== "username" && (
+          <ExitButton
+            onExit={() => {
+              setState("username");
+              setEmail(undefined);
+            }}
           />
-        </div>
-      )}
-      {state === "createPass" && (
-        <div>
+        )}
+        {state === "username" && (
+          <TextInput description="Email" onSubmit={onUsername} type="email" />
+        )}
+        {state === "username" && (
+          <div className="login-footer">
+            <div
+              className="create-account-button"
+              onClick={() => setState("createEmail")}
+            >
+              Create Account
+            </div>
+          </div>
+        )}
+        {state === "password" && (
           <TextInput
-            description="Create a password"
-            onSubmit={onNewPassword}
+            description="Password"
+            onSubmit={onPassword}
             type="password"
           />
-        </div>
-      )}
-      {state === "createUsername" && (
-        <div>
-          <TextInput description="Create a username" onSubmit={onNewUsername} />
-        </div>
-      )}
-      {state === "enterPhoneNumber" && (
-        <div>
-          <TextInput description="Enter phone number" onSubmit={onPhoneNumber} type="tel" defaultText="+1"/>
-        </div>
-      )}
+        )}
+        {state === "createEmail" && (
+          <div>
+            <TextInput
+              description="Please enter your email"
+              onSubmit={onNewEmail}
+              type="email"
+            />
+          </div>
+        )}
+        {state === "createPass" && (
+          <div>
+            <TextInput
+              description="Create a password"
+              onSubmit={onNewPassword}
+              type="password"
+            />
+          </div>
+        )}
+        {state === "createUsername" && (
+          <div>
+            <TextInput
+              description="Create a username"
+              onSubmit={onNewUsername}
+            />
+          </div>
+        )}
+        {state === "enterPhoneNumber" && (
+          <div>
+            <TextInput
+              description="Enter phone number"
+              onSubmit={onPhoneNumber}
+              type="tel"
+              defaultText="+1"
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

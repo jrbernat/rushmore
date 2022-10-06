@@ -60,7 +60,7 @@ const TextInput = (props: TextInputProps) => {
   return (
     <div className="text-input">
       <span>{description}</span>
-      <div>
+      <div className="text-area-input-container">
         <input
           ref={text}
           maxLength={maxLength}

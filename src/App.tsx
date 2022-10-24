@@ -1,17 +1,13 @@
+import { createContext, useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "./App.css";
-import Error from "./Views/Rushmore/Error";
-import Home from "./Components/Home";
-import Rushmore from "./Views/Rushmore";
-import React, { createContext, useContext, useEffect, useState } from "react";
 import * as Realm from "realm-web";
+import "./App.css";
+import Home from "./Views/Landing/Home";
 import { User } from "./protocol";
+import Rushmore from "./Views/Rushmore";
+import Error from "./Views/Rushmore/Error";
 
-export type View =
-  | "landing"
-  | "join"
-  | "history"
-  | "create"
+export type View = "landing" | "join" | "history" | "create" | "friends";
 
 export const app = new Realm.App({ id: "rushmore-mlahn" });
 

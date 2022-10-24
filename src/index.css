@@ -40,6 +40,10 @@ footer {
   gap: 8px;
 }
 
+.space-between {
+  justify-content: space-between;
+}
+
 .center-align {
   align-items: center;
 }
@@ -50,4 +54,8 @@ footer {
 
 .black-opaque {
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.full-width {
+  width: 100%;
 }

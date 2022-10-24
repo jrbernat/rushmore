@@ -132,7 +132,7 @@ const LogIn = (props: LoginProps) => {
 
   return (
     <div className="log-in">
-      <div>
+      <div className="title-container">
         <div className="log-in-title">Welcome to Rushmore!</div>
         Please log in or create an account
       </div>

@@ -138,3 +138,24 @@
     color: red;
     font-size: 32px;
 }
+
+.inviter {
+  width: 100%;
+}
+
+.invite-friends {
+  display: flex;
+  flex-direction: column;
+  gap: 1ch;
+  width: 80%;
+}
+
+.friend-invite {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px;
+  border-radius: 2px;
+  background-color: lightcoral;
+}

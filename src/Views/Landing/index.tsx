@@ -10,6 +10,7 @@ const Landing = (props: CommonProps) => {
       <FullWidthButton text={"Join Current"} onClick={() => setView("join")} />
       <FullWidthButton text={"Create New"} onClick={() => setView("create")} />
       <FullWidthButton text={"View History"} onClick={() => setView("history")} />
+      <FullWidthButton text={"Friends"} onClick={() => setView("friends")}/>
     </div>
   );
 };

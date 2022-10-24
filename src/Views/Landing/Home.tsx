@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { app, UserContext, View } from "../App";
-import Create from "../Views/Create";
-import History from "../Views/History";
-import Join from "../Views/Join";
-import Landing from "../Views/Landing";
-import LogIn from "../Views/LogIn";
-import Popup from "./PopUp";
+import { app, UserContext, View } from "../../App";
+import Create from "../Create";
+import History from "../History";
+import Join from "../Join";
+import Landing from ".";
+import LogIn from "../LogIn";
+import Popup from "../../Components/PopUp";
+import Friends from "../Friends";
 
 const Home = (props: { refreshUser: () => Promise<any> }) => {
   const { refreshUser } = props;
@@ -24,6 +25,8 @@ const Home = (props: { refreshUser: () => Promise<any> }) => {
         return <History setView={setView} />;
       case "create":
         return <Create setView={setView} />;
+      case "friends":
+        return <Friends setView={setView}/>
     }
   };
 
